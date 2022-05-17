@@ -165,7 +165,7 @@ model.add(Conv1D(128, 5,padding='same',
 model.add(Activation('relu'))
 model.add(Dropout(0.1))
 model.add(MaxPooling1D(pool_size=(8)))
-model.add(Conv1D(128, 5,padding='same',))
+model.add(Conv1D(128, 5,padding='same',input_shape=(X_train.shape[1],1)))
 model.add(Activation('relu'))
 model.add(Dropout(0.1))
 model.add(Flatten())
@@ -176,7 +176,7 @@ model.summary()
 model.compile(loss='sparse_categorical_crossentropy',
               optimizer=opt,
               metrics=['accuracy'])
-              
+
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
 checkpoint = ModelCheckpoint("hasil_latihan.hdf5", monitor='val_accuracy', verbose=1,
     save_best_only=True, mode='max', period=1, save_weights_only=True)
