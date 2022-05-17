@@ -154,7 +154,7 @@ model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.4))
 model.add(Dense(8, activation='softmax'))
-opt = opt = keras.optimizers.RMSprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
+opt = keras.optimizers.RMSprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
 model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
 model.summary()
 
