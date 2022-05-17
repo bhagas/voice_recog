@@ -142,21 +142,40 @@ from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential, load_model
 
 #BUAT CNN LAYER
+# model = Sequential()
+# model.add(Conv1D(64, kernel_size=(20), activation='relu', input_shape=(X_train.shape[1],1)))
+# model.add(Conv1D(128, kernel_size=(20),activation='relu',kernel_regularizer=l2(0.01), bias_regularizer=l2(0.01)))
+# model.add(MaxPooling1D(pool_size=(8)))
+# model.add(Dropout(0.4))
+# model.add(Conv1D(128, kernel_size=(20),activation='relu'))
+# model.add(MaxPooling1D(pool_size=(8)))
+# model.add(Dropout(0.4))
+# model.add(Flatten())
+# model.add(Dense(256, activation='relu'))
+# model.add(Dropout(0.4))
+# model.add(Dense(8, activation='softmax'))
+# opt = keras.optimizers.Adam(lr=0.0001)
+# model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
+# model.summary()
+
 model = Sequential()
-model.add(Conv1D(64, kernel_size=(20), activation='relu', input_shape=(X_train.shape[1],1)))
-model.add(Conv1D(128, kernel_size=(20),activation='relu',kernel_regularizer=l2(0.01), bias_regularizer=l2(0.01)))
+
+model.add(Conv1D(128, 5,padding='same',
+                 input_shape=(X_train.shape[1],1)))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
 model.add(MaxPooling1D(pool_size=(8)))
-model.add(Dropout(0.4))
-model.add(Conv1D(128, kernel_size=(20),activation='relu'))
-model.add(MaxPooling1D(pool_size=(8)))
-model.add(Dropout(0.4))
+model.add(Conv1D(128, 5,padding='same',))
+model.add(Activation('relu'))
+model.add(Dropout(0.1))
 model.add(Flatten())
-model.add(Dense(256, activation='relu'))
-model.add(Dropout(0.4))
-model.add(Dense(8, activation='softmax'))
-opt = keras.optimizers.Adam(lr=0.0001)
-model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
+model.add(Dense(8))
+model.add(Activation('softmax'))
+opt = keras.optimizers.rmsprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
 model.summary()
+model.compile(loss='sparse_categorical_crossentropy',
+              optimizer=opt,
+              metrics=['accuracy'])
 
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
 checkpoint = ModelCheckpoint("hasil_latihan.hdf5", monitor='val_accuracy', verbose=1,
