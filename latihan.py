@@ -161,7 +161,7 @@ from tensorflow.keras.models import Sequential, load_model
 model = Sequential()
 
 model.add(Conv1D(128, 5,padding='same',
-                 input_shape=(40,1))))
+                 input_shape=(40,1)))
 model.add(Activation('relu'))
 model.add(Dropout(0.1))
 model.add(MaxPooling1D(pool_size=(8)))
