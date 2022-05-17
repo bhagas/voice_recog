@@ -11,4 +11,11 @@ masuk ke virtualenvirontment
 ```
 install packages
 
+```python
+pip install matplotlib
+pip install tensorflow
+pip install librosa
+pip install Ipython
+```
+
 download dataset, copy semua actor, buat folder dataset dan taruh di dalam nya
