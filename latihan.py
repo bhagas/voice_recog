@@ -1,3 +1,4 @@
+import argparse
 import librosa
 #matplotlib inline
 import matplotlib.pyplot as plt
@@ -30,6 +31,14 @@ import seaborn as sns
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint
 from tensorflow.keras.utils import to_categorical
 from sklearn.metrics import classification_report
+
+
+parser = argparse.ArgumentParser()
+parser.add_argument("-i", "--iterasi", required=True)
+parser.add_argument("-k", "--kepadatan", required=True)
+args = parser.parse_args()
+# print(f'Hi {args.name} , Welcome ')
+
 
 #----labeling
 audio = "./dataset/"
@@ -153,7 +162,7 @@ model.summary()
 checkpoint = ModelCheckpoint("hasil_latihan.hdf5", monitor='val_accuracy', verbose=1,
     save_best_only=True, mode='max', period=1, save_weights_only=True)
 
-model_history=model.fit(X_train, y_train,batch_size=32, epochs=40, validation_data=(X_test, y_test),callbacks=[checkpoint])
+model_history=model.fit(X_train, y_train,batch_size=int(args.kepadatan), epochs=int(args.iterasi), validation_data=(X_test, y_test),callbacks=[checkpoint])
 
 # TAMPILKAN
 plt.plot(model_history.history['accuracy'])

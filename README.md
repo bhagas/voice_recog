@@ -16,6 +16,13 @@ pip install matplotlib
 pip install tensorflow
 pip install librosa
 pip install Ipython
+pip install argparse
 ```
 
 download dataset, copy semua actor, buat folder dataset dan taruh di dalam nya
+
+jalankan script
+
+```python
+ python .\latihan.py --iterasi 10 --kepadatan 32
+```
