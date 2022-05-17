@@ -176,7 +176,7 @@ model.summary()
 model.compile(loss='sparse_categorical_crossentropy',
               optimizer=opt,
               metrics=['accuracy'])
-
+              
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
 checkpoint = ModelCheckpoint("hasil_latihan.hdf5", monitor='val_accuracy', verbose=1,
     save_best_only=True, mode='max', period=1, save_weights_only=True)
