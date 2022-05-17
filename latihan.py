@@ -200,5 +200,5 @@ actual = pd.DataFrame({'Seharusnya': actual})
 # COMBINE BOTH 
 finaldf = actual.join(predictions)
 # finaldf[140:150]
-
+print('PENGAMBILAN 10 DATA DARI DATA UJI:')
 print(tabulate(finaldf[140:150], headers = 'keys', tablefmt = 'psql'))
