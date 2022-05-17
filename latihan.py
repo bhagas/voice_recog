@@ -171,7 +171,7 @@ model.add(Dropout(0.1))
 model.add(Flatten())
 model.add(Dense(8))
 model.add(Activation('softmax'))
-opt = keras.optimizers.rmsprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
+opt = keras.optimizers.RMSprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
 model.summary()
 model.compile(loss='sparse_categorical_crossentropy',
               optimizer=opt,
