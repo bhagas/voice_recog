@@ -17,6 +17,7 @@ pip install tensorflow
 pip install librosa
 pip install Ipython
 pip install argparse
+pip install tabulate
 ```
 
 download dataset, copy semua actor, buat folder dataset dan taruh di dalam nya

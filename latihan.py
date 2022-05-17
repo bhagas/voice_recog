@@ -182,3 +182,23 @@ plt.xlabel('Epoch')
 plt.legend(['train', 'test'], loc='upper left')
 plt.savefig('Initial_Model_loss.png')
 plt.show()
+
+from tabulate import tabulate
+# PREDICTIONS
+predictions = model.predict(X_test)
+predictions=predictions.argmax(axis=1)
+predictions = predictions.astype(int).flatten()
+predictions = (lb.inverse_transform((predictions)))
+predictions = pd.DataFrame({'Hasil Prediksi': predictions})
+
+# ACTUAL LABELS
+actual=y_test.argmax(axis=1)
+actual = actual.astype(int).flatten()
+actual = (lb.inverse_transform((actual)))
+actual = pd.DataFrame({'Seharusnya': actual})
+
+# COMBINE BOTH 
+finaldf = actual.join(predictions)
+# finaldf[140:150]
+
+print(tabulate(finaldf[140:150], headers = 'keys', tablefmt = 'psql'))
