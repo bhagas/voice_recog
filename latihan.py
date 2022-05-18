@@ -182,7 +182,7 @@ from tensorflow.keras.models import Sequential, load_model
               
             #   model3
 model = Sequential()
-    model.add(Conv1D(256, 8, padding='same',input_shape=(shape,1)))  # X_train.shape[1] = No. of Columns
+    model.add(Conv1D(256, 8, padding='same',input_shape=(X_train.shape[1],1)))  # X_train.shape[1] = No. of Columns
     model.add(Activation('relu'))
 
     model.add(Conv1D(256, 8, padding='same'))
