@@ -25,5 +25,5 @@ download dataset, copy semua actor, buat folder dataset dan taruh di dalam nya
 jalankan script
 
 ```python
- python .\latihan.py --iterasi 10 --kepadatan 32
+ python .\latihan.py --iterasi 10 --kepadatan 32 --dataset dataset_male --output hasil_prediksi_cowo
 ```

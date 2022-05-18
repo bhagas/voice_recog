@@ -36,12 +36,14 @@ from sklearn.metrics import classification_report
 parser = argparse.ArgumentParser()
 parser.add_argument("-i", "--iterasi", required=True)
 parser.add_argument("-k", "--kepadatan", required=True)
+parser.add_argument("-d", "--dataset", required=True)
+parser.add_argument("-o", "--output", required=True)
 args = parser.parse_args()
 # print(f'Hi {args.name} , Welcome ')
 
 
 #----labeling
-audio = "./dataset/"
+audio = "./"+args.dataset+"/"
 actor_folders = os.listdir(audio) #list file di directory
 actor_folders.sort() 
 actor_folders[0:5]
@@ -154,7 +156,7 @@ model.add(Flatten())
 model.add(Dense(256, activation='relu'))
 model.add(Dropout(0.4))
 model.add(Dense(8, activation='softmax'))
-opt = keras.optimizers.RMSprop(lr=0.00005, rho=0.9, epsilon=None, decay=0.0)
+opt = keras.optimizers.Adam(lr=0.00001)
 model.compile(loss='categorical_crossentropy', optimizer=opt,metrics=['accuracy'])
 model.summary()
 
@@ -177,7 +179,7 @@ model.summary()
 #               metrics=['accuracy'])
               
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
-checkpoint = ModelCheckpoint("hasil_latihan.hdf5", monitor='val_accuracy', verbose=1,
+checkpoint = ModelCheckpoint(args.output+".hdf5", monitor='val_accuracy', verbose=1,
     save_best_only=True, mode='max', period=1, save_weights_only=True)
 
 model_history=model.fit(X_train, y_train,batch_size=int(args.kepadatan), epochs=int(args.iterasi), validation_data=(X_test, y_test),callbacks=[checkpoint])
@@ -219,4 +221,4 @@ actual = pd.DataFrame({'Seharusnya': actual})
 finaldf = actual.join(predictions)
 # finaldf[140:150]
 print('PENGAMBILAN 10 DATA DARI DATA UJI:')
-print(tabulate(finaldf[140:150], headers = 'keys', tablefmt = 'psql'))
+print(tabulate(finaldf[0:50], headers = 'keys', tablefmt = 'psql'))
