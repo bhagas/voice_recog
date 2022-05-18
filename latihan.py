@@ -180,44 +180,43 @@ from tensorflow.keras.models import Sequential, load_model
 #               optimizer=opt,
 #               metrics=['accuracy'])
               
-            #   model3
+#   model3
 model = Sequential()
-    model.add(Conv1D(256, 8, padding='same',input_shape=(X_train.shape[1],1)))  # X_train.shape[1] = No. of Columns
-    model.add(Activation('relu'))
+model.add(Conv1D(256, 8, padding='same',input_shape=(X_train.shape[1],1)))
+model.add(Activation('relu'))
 
-    model.add(Conv1D(256, 8, padding='same'))
-    model.add(BatchNormalization())
-    model.add(Activation('relu'))
-    model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
+model.add(Conv1D(256, 8, padding='same'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Dropout(0.25))
+model.add(MaxPooling1D(pool_size=(8)))
+model.add(Conv1D(128, 8, padding='same'))
+model.add(Activation('relu'))
+model.add(Conv1D(128, 8, padding='same'))
+model.add(Activation('relu'))
+model.add(Conv1D(128, 8, padding='same'))
+model.add(Activation('relu'))
 
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(Activation('relu'))
+model.add(Conv1D(128, 8, padding='same'))
+model.add(BatchNormalization())
+model.add(Activation('relu'))
+model.add(Dropout(0.25))
+model.add(MaxPooling1D(pool_size=(8)))
 
-    model.add(Conv1D(128, 8, padding='same'))
-    model.add(BatchNormalization())
-    model.add(Activation('relu'))
-    model.add(Dropout(0.25))
-    model.add(MaxPooling1D(pool_size=(8)))
+model.add(Conv1D(64, 8, padding='same'))
+model.add(Activation('relu'))
 
-    model.add(Conv1D(64, 8, padding='same'))
-    model.add(Activation('relu'))
+model.add(Conv1D(64, 8, padding='same'))
+model.add(Activation('relu'))
+model.add(Flatten())
 
-    model.add(Conv1D(64, 8, padding='same'))
-    model.add(Activation('relu'))
-    model.add(Flatten())
-
-    model.add(Dense(8)) # Target class number, in this case the 8 emotions
-    model.add(Activation('softmax'))
-    opt = keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
-    model.compile(loss='categorical_crossentropy',
+model.add(Dense(8)) # Target class number, in this case the 8 emotions
+model.add(Activation('softmax'))
+opt = keras.optimizers.RMSprop(lr=0.00001, decay=1e-6)
+model.compile(loss='categorical_crossentropy',
               optimizer=opt,
               metrics=['accuracy'])
-    model.summary()
+model.summary()
 
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
 checkpoint = ModelCheckpoint(args.output+".hdf5", monitor='val_accuracy', verbose=1,
