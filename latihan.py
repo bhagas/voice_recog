@@ -220,7 +220,7 @@ model.summary()
 
 # TARINING MODEL DAN SIMPAN MODEL (TERBAIK)
 checkpoint = ModelCheckpoint(args.output+".hdf5", monitor='val_accuracy', verbose=1,
-    save_best_only=True, mode='max', period=1, save_weights_only=True)
+    save_best_only=True, mode='max', period=1, save_weights_only=False)
 
 model_history=model.fit(X_train, y_train,batch_size=int(args.kepadatan), epochs=int(args.iterasi), validation_data=(X_test, y_test),callbacks=[checkpoint])
 

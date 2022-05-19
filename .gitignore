@@ -2,3 +2,6 @@ dataset
 dataset_coba
 hasil_latihan.hdf5
 voice_recog
+test_model
+hasil_prediksi.hdf5
+model_tfjs

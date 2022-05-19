@@ -4,8 +4,8 @@
  async function dengar(){
     const mic = await tf.data.microphone({
    fftSize: 1024,
-   columnTruncateLength: 232,
-   numFramesPerSpectrogram: 43,
+   columnTruncateLength: 259,
+   numFramesPerSpectrogram: 0,
    sampleRateHz:48000,
    includeSpectrogram: true,
    includeWaveform: true
@@ -15,15 +15,18 @@ const audioData = await mic.capture();
 
 setTimeout(async function(){
     const spectrogramTensor = audioData.spectrogram;
-// spectrogramTensor.print();
-console.log(spectrogramTensor);
+spectrogramTensor.print();
+// console.log(spectrogramTensor);
 const waveformTensor = audioData.waveform;
 // waveformTensor.print();
 mic.stop();
 
-let model = await tf.loadLayersModel("./model_tfjs/model.json")
-z = model.predict(spectrogramTensor)
-console.log(z);
+let model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
+let z = model.predict(spectrogramTensor)
+// console.log(z);
+z.print()
+let index = z.argMax(1).dataSync()[0]
+// console.log(index);
 }, 5000);
   }
 
