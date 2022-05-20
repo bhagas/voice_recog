@@ -1,36 +1,157 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
 <script>
-  
- async function dengar(){
-    const mic = await tf.data.microphone({
-   fftSize: 1024,
-   columnTruncateLength: 259,
-   numFramesPerSpectrogram: 0,
-   sampleRateHz:48000,
-   includeSpectrogram: true,
-   includeWaveform: true
-});
-const audioData = await mic.capture();
+//   let label = ['netral', 'calm', 'bahagia', 'sedih', 'marah', 'takut', 'jijik', 'terkejut']
+//  async function dengar(){
+//     const mic = await tf.data.microphone({
+//    fftSize: 1024,
+//    columnTruncateLength: 259,
+//    numFramesPerSpectrogram: 100,
+//    sampleRateHz:44100,
+//    includeSpectrogram: true,
+//    includeWaveform: false
+// });
+// const audioData = await mic.capture();
 
 
-setTimeout(async function(){
-    const spectrogramTensor = audioData.spectrogram;
-spectrogramTensor.print();
-// console.log(spectrogramTensor);
-const waveformTensor = audioData.waveform;
-// waveformTensor.print();
-mic.stop();
+// setTimeout(async function(){
+//     const spectrogramTensor = audioData.spectrogram;
+// // spectrogramTensor.print();
+// // console.log(spectrogramTensor);
+// // const waveformTensor = audioData.waveform;
+// // waveformTensor.print();
+// mic.stop();
 
-let model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
-let z = model.predict(spectrogramTensor)
-// console.log(z);
-z.print()
-let index = z.argMax(1).dataSync()[0]
-// console.log(index);
-}, 5000);
+// let model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
+// let z = model.predict(spectrogramTensor)
+// // console.log(z);
+// z.print()
+// let index = z.argMax(1).dataSync()[0]
+// console.log(z.argMax(axis=1).dataSync());
+// alert('Emosi Anda: '+label[index])
+// }, 5000);
+//   }
+
+// dengar()
+
+
+
+
+</script>
+
+<script src="https://lab.miguelmota.com/spectrogram/spectrogram.js"></script>
+<script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
+<style type="text/css">
+  .hidden {
+      display: none;
   }
 
-dengar()
+  .active {
+      background-color: #090;
+  }
+</style>
+
+<body>
+
+  <button id="listen" onclick="listen()">Mulai</button>
+  <button id="listen" onclick="baca_file()">Baca File</button>
+  <canvas id="canvas"></canvas>
+
+</body>
+
+<script type="text/javascript">
+
+  function normalize(x) {
+    z = nj.array([x]);
+
+    let mean = z.mean()
+    let std = z.std()
+  
+    return x.map(x => (x - mean) / std);
+}
 
 
+
+function toggleButtons(enable) {
+    document.querySelectorAll('button').forEach(b => b.disabled = !enable);
+}
+
+let jalan =0;
+let mic;
+let audioData;
+let model;
+async function listen() {
+
+
+    if (jalan==1) {
+        jalan=0
+        mic.stop();
+       
+        // console.log(audioData.spectrogram.dataSync());
+        // let konv =audioData.spectrogram.dataSync()
+        // const vals = normalize(konv)
+        // console.log(vals);
+        // const waveformTensor = audioData.waveform;
+        // waveformTensor.print(); 
+        let d = normalize(audioData.spectrogram.dataSync())
+        console.log(d);
+        d = tf.tensor(d, [43, 259, 1])
+        let z = model.predict(d)
+        z.print()
+        let index = z.argMax(1).dataSync()
+        console.log(index);
+        toggleButtons(true);
+        document.getElementById('listen').textContent = 'Mulai';
+        return;
+    }
+
+       
+    
+    toggleButtons(false);
+    document.getElementById('listen').textContent = 'Stop';
+    document.getElementById('listen').disabled = false;
+    jalan=1
+ 
+     
+ audioData = await mic.capture();
+
+}
+
+async function baca_file(){
+
+var spectro = Spectrogram(document.getElementById('canvas'), {
+  audio: {
+    enable: false
+  }
+});
+ 
+var audioContext = new AudioContext();
+var req = new XMLHttpRequest();
+req.open("GET", "http://149.129.240.254/voice_recog/03-01-01-01-01-01-01.wav", true);
+req.responseType = "arraybuffer";
+
+ 
+req.onload = function() {
+  audioContext.decodeAudioData(req.response, function(buffer) {
+    spectro.connectSource(buffer, audioContext);
+    spectro.start();
+  });
+};
+ 
+req.send();
+}
+async function app() {
+  
+    //predictWord();
+    model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
+    mic = await tf.data.microphone({
+        fftSize: 1024,
+        columnTruncateLength: 259,
+        numFramesPerSpectrogram: 43,
+        sampleRateHz:48000,
+        includeSpectrogram: true,
+        includeWaveform: true
+      });
+}
+
+app();
 </script>
