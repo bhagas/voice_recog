@@ -1,45 +1,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
-<script>
-//   let label = ['netral', 'calm', 'bahagia', 'sedih', 'marah', 'takut', 'jijik', 'terkejut']
-//  async function dengar(){
-//     const mic = await tf.data.microphone({
-//    fftSize: 1024,
-//    columnTruncateLength: 259,
-//    numFramesPerSpectrogram: 100,
-//    sampleRateHz:44100,
-//    includeSpectrogram: true,
-//    includeWaveform: false
-// });
-// const audioData = await mic.capture();
-
-
-// setTimeout(async function(){
-//     const spectrogramTensor = audioData.spectrogram;
-// // spectrogramTensor.print();
-// // console.log(spectrogramTensor);
-// // const waveformTensor = audioData.waveform;
-// // waveformTensor.print();
-// mic.stop();
-
-// let model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
-// let z = model.predict(spectrogramTensor)
-// // console.log(z);
-// z.print()
-// let index = z.argMax(1).dataSync()[0]
-// console.log(z.argMax(axis=1).dataSync());
-// alert('Emosi Anda: '+label[index])
-// }, 5000);
-//   }
-
-// dengar()
-
-
-
-
-</script>
-
 <script src="https://lab.miguelmota.com/spectrogram/spectrogram.js"></script>
 <script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <style type="text/css">
   .hidden {
       display: none;
@@ -92,15 +54,15 @@ async function listen() {
         // console.log(vals);
         // const waveformTensor = audioData.waveform;
         // waveformTensor.print(); 
+        // console.log(audioData.spectrogram.dataSync());
         let d = normalize(audioData.spectrogram.dataSync())
-       
-        d = tf.tensor(d, [1, 259, 1])
-        d.print()
-        let z = model.predict(d)
-        z.print()
-        let index = z.argMax(1).dataSync()
-        console.log(index);
-        alert(`Emosi Anda: ${label[index]}`)
+        console.log(d);
+        axios.post('http://149.129.240.254:8015/prediksi', {
+            spectogram: d
+          })
+          .then(function (response) {
+            console.log(response);
+          })
         toggleButtons(true);
         document.getElementById('listen').textContent = 'Mulai';
         return;
@@ -144,7 +106,7 @@ req.send();
 async function app() {
   
     //predictWord();
-    model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
+    // model = await tf.loadLayersModel("http://149.129.240.254/voice_recog/model.json")
     mic = await tf.data.microphone({
         fftSize: 1024,
         columnTruncateLength: 259,

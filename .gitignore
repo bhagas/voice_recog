@@ -5,3 +5,4 @@ voice_recog
 test_model
 hasil_prediksi.hdf5
 model_tfjs
+node/node_modules
