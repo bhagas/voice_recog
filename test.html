@@ -59,10 +59,10 @@
 </body>
 
 <script type="text/javascript">
-
+ let label = ['netral', 'calm', 'bahagia', 'sedih', 'marah', 'takut', 'jijik', 'terkejut']
   function normalize(x) {
     z = nj.array([x]);
-
+    
     let mean = z.mean()
     let std = z.std()
   
@@ -93,12 +93,14 @@ async function listen() {
         // const waveformTensor = audioData.waveform;
         // waveformTensor.print(); 
         let d = normalize(audioData.spectrogram.dataSync())
-        console.log(d);
-        d = tf.tensor(d, [43, 259, 1])
+       
+        d = tf.tensor(d, [1, 259, 1])
+        d.print()
         let z = model.predict(d)
         z.print()
         let index = z.argMax(1).dataSync()
         console.log(index);
+        alert(`Emosi Anda: ${label[index]}`)
         toggleButtons(true);
         document.getElementById('listen').textContent = 'Mulai';
         return;
@@ -146,7 +148,7 @@ async function app() {
     mic = await tf.data.microphone({
         fftSize: 1024,
         columnTruncateLength: 259,
-        numFramesPerSpectrogram: 43,
+        numFramesPerSpectrogram: 1,
         sampleRateHz:48000,
         includeSpectrogram: true,
         includeWaveform: true

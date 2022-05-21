@@ -114,11 +114,12 @@ y_test = test.iloc[:,:2].drop(columns=['gender'])
 print(X_test.shape)
 
 # NORMALIZE DATA
+
 mean = np.mean(X_train, axis=0)
 std = np.std(X_train, axis=0)
 X_train = (X_train - mean)/std
 X_test = (X_test - mean)/std
-
+# print(X_test)
 # masukkan data ke array untuk keras
 X_train = np.array(X_train)
 y_train = np.array(y_train)
@@ -135,7 +136,7 @@ print(lb.classes_)
 # RESHAPE DATA KE 3D TENSOR 
 X_train = X_train[:,:,np.newaxis]
 X_test = X_test[:,:,np.newaxis]
-
+tf.print(X_test, summarize=-1)
 X_train.shape
 
 
