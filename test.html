@@ -1,6 +1,4 @@
 <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@2.0.0/dist/tf.min.js"></script>
-<script src="https://lab.miguelmota.com/spectrogram/spectrogram.js"></script>
-<script src="https://cdn.jsdelivr.net/gh/nicolaspanel/numjs@0.15.1/dist/numjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <style type="text/css">
   .hidden {
@@ -15,23 +13,12 @@
 <body>
 
   <button id="listen" onclick="listen()">Mulai</button>
-  <button id="listen" onclick="baca_file()">Baca File</button>
   <canvas id="canvas"></canvas>
 
 </body>
 
 <script type="text/javascript">
  let label = ['netral', 'calm', 'bahagia', 'sedih', 'marah', 'takut', 'jijik', 'terkejut']
-  function normalize(x) {
-    z = nj.array([x]);
-    
-    let mean = z.mean()
-    let std = z.std()
-  
-    return x.map(x => (x - mean) / std);
-}
-
-
 
 function toggleButtons(enable) {
     document.querySelectorAll('button').forEach(b => b.disabled = !enable);
@@ -52,16 +39,21 @@ async function listen() {
         // let konv =audioData.spectrogram.dataSync()
         // const vals = normalize(konv)
         // console.log(vals);
-        // const waveformTensor = audioData.waveform;
+        const waveformTensor = audioData.waveform;
+        console.log(waveformTensor.dataSync());
         // waveformTensor.print(); 
         // console.log(audioData.spectrogram.dataSync());
-        let d = normalize(audioData.spectrogram.dataSync())
-        console.log(d);
-        axios.post('http://149.129.240.254:8015/prediksi', {
-            spectogram: d
+        let d = audioData.spectrogram.dataSync();
+        audioData.spectrogram.print()
+        // console.log(audioData);
+   
+          axios.post('http://149.129.240.254:8015/mffc', {
+            spectogram: waveformTensor.dataSync()
           })
           .then(function (response) {
             console.log(response);
+            alert('Emosi Anda:'+response.data.emosi);
+            window.location.reload()
           })
         toggleButtons(true);
         document.getElementById('listen').textContent = 'Mulai';
@@ -80,29 +72,6 @@ async function listen() {
 
 }
 
-async function baca_file(){
-
-var spectro = Spectrogram(document.getElementById('canvas'), {
-  audio: {
-    enable: false
-  }
-});
- 
-var audioContext = new AudioContext();
-var req = new XMLHttpRequest();
-req.open("GET", "http://149.129.240.254/voice_recog/03-01-01-01-01-01-01.wav", true);
-req.responseType = "arraybuffer";
-
- 
-req.onload = function() {
-  audioContext.decodeAudioData(req.response, function(buffer) {
-    spectro.connectSource(buffer, audioContext);
-    spectro.start();
-  });
-};
- 
-req.send();
-}
 async function app() {
   
     //predictWord();
